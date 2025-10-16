@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>infinite scrolling</title>
+    <script src="gsap.js"></script>
+    <link  rel="stylesheet" type="text/css" href="style.css" >
+</head>
+
+<body>
+    <div class="photos">
+        <div class="photos_line">
+            <div class="photos_line_photo">
+                <img src="photos/photo (1).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (2).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (3).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (4).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (5).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (6).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (7).png" />
+            </div>
+        </div>
+        <div class="photos_line">
+            <div class="photos_line_photo">
+                <img src="photos/photo (8).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (9).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (10).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (11).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (12).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (13).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (14).png" />
+            </div>
+        </div>
+        <div class="photos_line">
+            <div class="photos_line_photo">
+                <img src="photos/photo (15).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (16).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (17).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (18).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (19).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (20).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (21).png" />
+            </div>
+        </div>
+        <div class="photos_line">
+            <div class="photos_line_photo">
+                <img src="photos/photo (22).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (23).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (24).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (25).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (26).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (27).png" />
+            </div>
+            <div class="photos_line_photo">
+                <img src="photos/photo (28).png" />
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const photobox={
+        container:document.querySelector(".photos"),
+        imgs_data:[],
+        container_width:0,
+        container_height:0,
+        photo_width:0,
+        photo_height:0,
+
+
+        if_movable:false,
+        mouse_x:0,
+        mouse_y:0,
+
+        init(){
+            this.resize()
+            window.addEventListener("resize",()=>{
+                this.resize();
+            })
+            console.log("图片数据初始化完成:", this.imgs_data); 
+
+            this.container.addEventListener("mousedown",()=>{
+                this.if_movable=true;
+                this.mouse_x=event.clientX,
+                this.mouse_y=event.clientY;
+
+            })
+            this.container.addEventListener("mouseup",()=>{
+                this.if_movable=false;
+            })
+            this.container.addEventListener("mouseleave",()=>{
+                this.if_movable=false;
+            })
+            this.container.addEventListener("mousemove",()=>{
+                this.move(event.clientX,event.clientY);
+            })
+        },
+        resize(){
+            let imgs=[...document.querySelectorAll(".photos_line_photo")];
+            this.container_width=this.container.offsetWidth
+            this.container_height=this.container.offsetHeight
+            this.photo_width=imgs[0].offsetWidth;
+            this.photo_height=imgs[0].offsetHeight;
+
+            //当尺寸改变的时候，需要清空mov_x/y
+            gsap.to(imgs.node,{
+                transform:`translate(0,0)`,
+                duration:0,
+                ease:'power4.out'
+            })
+            this.imgs_data=[]
+
+            imgs.forEach(img => {
+               this.imgs_data.push({
+                node:img,
+                x:img.offsetLeft,
+                y:img.offsetTop,
+                mov_x:0,
+                mov_y:0,
+                ani:0
+               })
+            });
+            
+        },
+        move(x,y){
+            if(!this.if_movable) return 0
+            let distance_x=x-this.mouse_x
+            let distance_y=y-this.mouse_y
+            
+            let duration = 0.3
+            this.imgs_data.forEach(img=>{
+                img.mov_x+=distance_x;
+                if(img.x+img.mov_x>this.container_width){
+                    img.mov_x-=container_width;
+                    duration=0
+                }
+                if(img.x+img.mov_x<-this.photo_width){
+                    img.mov_x+=this.container_width
+                    duration=0
+                }
+                img.mov_y+=distance_y;
+                if(img.y+img.mov_y>this.container_height){
+                    img.mov_y-=container_height;
+                    duration=0
+                }
+                if(img.y+img.mov_y<-this.photo_height){
+                    img.mov_y+=this.container_height
+                    duration=0
+
+                }
+                if(img.ani) img.ani.kill()
+/*                 img.node.style.transition=`${duration}s ease`
+                img.node.style.transform=`translate(${img.mov_x}px,${img.mov_y}px)` */
+
+                img.ani=gsap.to(img.node,{
+                    transform:`translate(${img.mov_x}px,${img.mov_y}px)`,
+                    duration:duration,
+                    ease:'power4.out'
+                })
+            })
+            this.mouse_x=x
+            this.mouse_y=y
+        }
+    }
+    photobox.init()
+</script>
+
+</html>

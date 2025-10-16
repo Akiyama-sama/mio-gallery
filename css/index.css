@@ -1,0 +1,28 @@
+:root {
+    --mio-blue-light:#91a7f2;
+    --mio-blue-deep:#4c60a6;
+    --mio-blue-text-border:#091748;
+    --mio-blue-text-light-fill:#D5DEFA;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-color: #171717;
+  overflow: hidden;
+}
+
+.photobox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: grab; /* 更改鼠标手势，更直观 */
+
+  /* 变换画布大小更为丝滑 */
+  transition: transform .8s ease .1s
+}
