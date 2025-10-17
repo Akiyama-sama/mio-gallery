@@ -3,6 +3,7 @@
     --mio-blue-deep:#4c60a6;
     --mio-blue-text-border:#091748;
     --mio-blue-text-light-fill:#D5DEFA;
+    --mio-blue-drag-line:#91d8f2;
 }
 
 * {
@@ -24,5 +25,14 @@ body {
   cursor: grab; /* 更改鼠标手势，更直观 */
 
   /* 变换画布大小更为丝滑 */
-  transition: transform .8s ease .1s
+  transition: transform .8s ease .1s;
+
+  /* 添加蓝白条纹背景 */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--mio-blue-light),
+    var(--mio-blue-light) 60px,
+    var(--mio-blue-text-light-fill) 60px,
+    var(--mio-blue-text-light-fill) 120px
+  );
 }

@@ -10,7 +10,7 @@
   writing-mode: horizontal-tb;
   direction: ltr;
   .text-arrow {
-    animation: drag_line_top 2s linear infinite;
+    animation: drag_line_top 0.5s linear infinite;
     & > svg {
       transform: rotate(180deg);
     }
@@ -22,7 +22,7 @@
   writing-mode: sideways-lr;
   direction: rtl;
   .text-arrow {
-    animation: drag_line_left 2s linear infinite;
+    animation: drag_line_left 0.5s linear infinite;
     & > svg {
       transform: rotate(-90deg);
     }
@@ -35,7 +35,7 @@
   writing-mode: vertical-lr;
   direction: rtl;
   .text-arrow {
-    animation: drag_line_right 2s linear infinite;
+    animation: drag_line_right 0.5s linear infinite;
     & > svg {
       transform: rotate(90deg);
     }
@@ -46,7 +46,7 @@
   writing-mode: horizontal-tb;
   direction: rtl;
   .text-arrow {
-    animation: drag_line_bottom 2s linear infinite;
+    animation: drag_line_bottom 0.5s linear infinite;
     & > svg {
       transform: rotate(0deg);
     }
@@ -59,12 +59,13 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding-inline: 10px;
+  padding-inline: 25px;
 }
 
 /* text-arrows 的子元素 p */
 .text-arrow > p {
-  font-size: xx-large;
+  font-family: "Archivo Black";
+  font-size: 48px;
   font-weight: bold;
   color: var(--mio-blue-text-border);
   /* text-shadow: 2px 2px 3px var(--mio-blue-text-light-fill); */
