@@ -15,7 +15,7 @@
   height: 3.5rem;
   overflow: hidden;
   background-color: var(--mio-blue-deep);
-  transition: transform .8s ease .1s,bottom .8s ease .1s;
+  transition: transform .8s ease .1s,top .8s ease .1s;
 
   /* 书写模式 */
 }
@@ -48,6 +48,7 @@
 .photo_drag_line_hidden {
   .photo_drag_line_top {
     transform: translateY(-100%);
+    top: 0;
   }
   .photo_drag_line_right {
     transform: translateX(100%);

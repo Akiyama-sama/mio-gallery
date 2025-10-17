@@ -4,11 +4,11 @@
   align-items: center;
 }
 
-/* top/left用rl模板 */
+
 .photo_drag_line_top {
-  /* 设置为垂直书写，块流从右到左 */
+
   writing-mode: horizontal-tb;
-  direction: rtl;
+  direction: ltr;
   .text-arrow {
     animation: drag_line_top 2s linear infinite;
     & > svg {
@@ -19,9 +19,8 @@
 
 
 .photo_drag_line_left {
-  /* 设置为垂直书写，块流从右到左 */
   writing-mode: sideways-lr;
-
+  direction: rtl;
   .text-arrow {
     animation: drag_line_left 2s linear infinite;
     & > svg {
@@ -32,8 +31,9 @@
 
 /* right/bottom用lr模板 */
 .photo_drag_line_right {
-  /* 设置为垂直书写，块流从左到右 */
-  writing-mode: vertical-rl;
+
+  writing-mode: vertical-lr;
+  direction: rtl;
   .text-arrow {
     animation: drag_line_right 2s linear infinite;
     & > svg {
@@ -43,9 +43,8 @@
 }
 
 .photo_drag_line_bottom {
-  /* 设置为垂直书写，块流从左到右 */
   writing-mode: horizontal-tb;
-  direction: ltr;
+  direction: rtl;
   .text-arrow {
     animation: drag_line_bottom 2s linear infinite;
     & > svg {
@@ -73,8 +72,7 @@
 
 @keyframes drag_line_top {
   to {
-      /* 注意：如果父容器是垂直模式，translateX(100%) 可能会产生预期外的效果。
-         如果是垂直移动，应使用 translateY。 */
+
       transform: translateX(-100%);
   }
 }
