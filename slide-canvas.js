@@ -30,9 +30,9 @@ const photobox = {
     animationFrameId: null, // requestAnimationFrame的ID
 
     //--用于实现canvas响应式大小--
-    canvas_standard_size:1440,
-    scale_num:1,
-    
+    canvas_standard_size: 1440,
+    scale_num: 1,
+
 
     // 初始化
     init() {
@@ -50,11 +50,11 @@ const photobox = {
         if (this.img_data.length > 0) this.move_imgs(0, 0);
 
 
-        let body_width=document.body.offsetWidth
+        let body_width = document.body.offsetWidth
 
-        let line_width=document.querySelector(".photo_drag_line_right").offsetWidth
+        let line_width = document.querySelector(".photo_drag_line_right").offsetWidth
 
-        this.scale_num=1-((2*line_width)/body_width)
+        this.scale_num = 1 - ((2 * line_width) / body_width)
 
     },
     // 创建图片数据即img_data
@@ -63,7 +63,8 @@ const photobox = {
         let loaded_count = 0;
         for (let i = 0; i < this.img_total; i++) {
             let img = new Image();
-            img.src = `https://picsum.photos/id/${i + 10}/350/500`; // 使用网络图片方便测试
+            const base_url = `https://mio-gallery.oss-cn-hangzhou.aliyuncs.com/mio-gallery-picture/${i}`;
+            const oss_params = `?x-oss-process=image/resize,m_fill,w_350,h_500`;
             img.onload = () => {
                 let col_index = i % this.row_max;
                 let line_index = Math.floor(i / this.row_max);
@@ -74,13 +75,30 @@ const photobox = {
                     x,
                     y
                 }; // 直接赋值，避免顺序错乱
-
                 loaded_count++;
                 // 确保所有图片加载完再统一绘制一次
                 if (loaded_count === this.img_total) {
                     this.move_imgs(0, 0);
                 }
             };
+            img.onerror = () => {
+                // 检查当前失败的链接是否是 .jpg 的
+                if (img.src.includes('.jpg')) {
+                    // 如果是 .jpg 失败了，则尝试加载 .png
+                    img.src = `${base_url}.png${oss_params}`;
+                } else {
+                    // 如果 .png 也失败了 (或者一开始就是 .png 失败了)
+                    console.error(`图片 ${i}.jpg/.png 均无法加载。`);
+
+                    // 虽然图片未加载成功，但仍需计数，以确保 move_imgs 最终被调用
+                    loaded_count++;
+                    if (loaded_count === this.img_total) {
+                        this.move_imgs(0, 0);
+                    }
+                }
+            };
+
+            img.src = `${base_url}.jpg${oss_params}`
         };
     },
     // 绑定所有监听事件
@@ -102,10 +120,10 @@ const photobox = {
             this.velocityY = 0;
 
             //删除photo_drag_line_hidden类
-            let drag_line =  document.querySelector(".photo_drag_line")
+            let drag_line = document.querySelector(".photo_drag_line")
             drag_line.classList.remove("photo_drag_line_hidden")
             //缩小canvas大小
-            this.canvas.style.transform=`scale(${this.scale_num})`
+            this.canvas.style.transform = `scale(${this.scale_num})`
 
         });
 
@@ -119,11 +137,11 @@ const photobox = {
 
             //添加photo_drag_line_hidden类
 
-            let drag_line =  document.querySelector(".photo_drag_line")
+            let drag_line = document.querySelector(".photo_drag_line")
             drag_line.classList.add("photo_drag_line_hidden")
 
             //解开canvas大小
-            this.canvas.style.transform=`scale(1)`
+            this.canvas.style.transform = `scale(1)`
 
         });
 
