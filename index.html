@@ -1,215 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="蓝白碗画布！！" />
+		<meta name="author" content="Akiyama" />
+		<title>蓝白碗画布！！</title>
+		<!--  字体引入 -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fira+Code&family=ZCOOL+QingKe+HuangYou&display=swap"
+			rel="stylesheet"
+		/>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>infinite scrolling</title>
-    <script src="gsap.js"></script>
-    <link  rel="stylesheet" type="text/css" href="style.css" >
-</head>
+		<link rel="stylesheet" href="./css/index.css" />
+		<link rel="stylesheet" href="./css/photo_drag_line.css" />
+		<link rel="stylesheet" href="./css/text-arrow.css" />
+	</head>
 
-<body>
-    <div class="photos">
-        <div class="photos_line">
-            <div class="photos_line_photo">
-                <img src="photos/photo (1).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (2).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (3).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (4).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (5).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (6).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (7).png" />
-            </div>
-        </div>
-        <div class="photos_line">
-            <div class="photos_line_photo">
-                <img src="photos/photo (8).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (9).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (10).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (11).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (12).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (13).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (14).png" />
-            </div>
-        </div>
-        <div class="photos_line">
-            <div class="photos_line_photo">
-                <img src="photos/photo (15).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (16).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (17).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (18).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (19).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (20).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (21).png" />
-            </div>
-        </div>
-        <div class="photos_line">
-            <div class="photos_line_photo">
-                <img src="photos/photo (22).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (23).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (24).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (25).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (26).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (27).png" />
-            </div>
-            <div class="photos_line_photo">
-                <img src="photos/photo (28).png" />
-            </div>
-        </div>
-    </div>
-</body>
-<script>
-    const photobox={
-        container:document.querySelector(".photos"),
-        imgs_data:[],
-        container_width:0,
-        container_height:0,
-        photo_width:0,
-        photo_height:0,
+	<body>
+		<canvas class="photobox"></canvas>
+		<div class="photo_drag_line photo_drag_line_hidden">
+			<div class="photo_drag_line_top"></div>
+			<div class="photo_drag_line_right"></div>
+			<div class="photo_drag_line_left"></div>
+			<div class="photo_drag_line_bottom"></div>
+		</div>
 
-
-        if_movable:false,
-        mouse_x:0,
-        mouse_y:0,
-
-        init(){
-            this.resize()
-            window.addEventListener("resize",()=>{
-                this.resize();
-            })
-            console.log("图片数据初始化完成:", this.imgs_data); 
-
-            this.container.addEventListener("mousedown",()=>{
-                this.if_movable=true;
-                this.mouse_x=event.clientX,
-                this.mouse_y=event.clientY;
-
-            })
-            this.container.addEventListener("mouseup",()=>{
-                this.if_movable=false;
-            })
-            this.container.addEventListener("mouseleave",()=>{
-                this.if_movable=false;
-            })
-            this.container.addEventListener("mousemove",()=>{
-                this.move(event.clientX,event.clientY);
-            })
-        },
-        resize(){
-            let imgs=[...document.querySelectorAll(".photos_line_photo")];
-            this.container_width=this.container.offsetWidth
-            this.container_height=this.container.offsetHeight
-            this.photo_width=imgs[0].offsetWidth;
-            this.photo_height=imgs[0].offsetHeight;
-
-            //当尺寸改变的时候，需要清空mov_x/y
-            gsap.to(imgs.node,{
-                transform:`translate(0,0)`,
-                duration:0,
-                ease:'power4.out'
-            })
-            this.imgs_data=[]
-
-            imgs.forEach(img => {
-               this.imgs_data.push({
-                node:img,
-                x:img.offsetLeft,
-                y:img.offsetTop,
-                mov_x:0,
-                mov_y:0,
-                ani:0
-               })
-            });
-            
-        },
-        move(x,y){
-            if(!this.if_movable) return 0
-            let distance_x=x-this.mouse_x
-            let distance_y=y-this.mouse_y
-            
-            let duration = 0.3
-            this.imgs_data.forEach(img=>{
-                img.mov_x+=distance_x;
-                if(img.x+img.mov_x>this.container_width){
-                    img.mov_x-=container_width;
-                    duration=0
-                }
-                if(img.x+img.mov_x<-this.photo_width){
-                    img.mov_x+=this.container_width
-                    duration=0
-                }
-                img.mov_y+=distance_y;
-                if(img.y+img.mov_y>this.container_height){
-                    img.mov_y-=container_height;
-                    duration=0
-                }
-                if(img.y+img.mov_y<-this.photo_height){
-                    img.mov_y+=this.container_height
-                    duration=0
-
-                }
-                if(img.ani) img.ani.kill()
-/*                 img.node.style.transition=`${duration}s ease`
-                img.node.style.transform=`translate(${img.mov_x}px,${img.mov_y}px)` */
-
-                img.ani=gsap.to(img.node,{
-                    transform:`translate(${img.mov_x}px,${img.mov_y}px)`,
-                    duration:duration,
-                    ease:'power4.out'
-                })
-            })
-            this.mouse_x=x
-            this.mouse_y=y
-        }
-    }
-    photobox.init()
-</script>
-
+		<template id="arrow-template-rl">
+			<div class="text-arrow">
+				<svg
+					id="_图层_1"
+					data-name="图层_1"
+					xmlns="http://www.w3.org/2000/svg"
+					version="1.1"
+					viewBox="0 0 300 300"
+					height="50px"
+					width="50px"
+				>
+					<!-- Generator: Adobe Illustrator 29.0.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 186)  -->
+					<defs>
+						<style>
+							.st0 {
+								fill: #d5defa;
+								stroke: #091748;
+								stroke-miterlimit: 10;
+								stroke-width: 13px;
+							}
+						</style>
+					</defs>
+					<path
+						class="st0"
+						d="M190.3,44.5c6.6,5,105,103.8,105.1,105.5s0,0,0,0c-1.6,2.9-100.3,103-108.1,107.7-9.8-.6-64.3,1.1-59.4-2.2-.2-1.2,13.5-16.9,44.9-51,24.9-27.1,46.1-50.5,47.1-51.8,5-3.9-9-14.5-16.8-24.2-45.4-50.7-77.7-81.2-74.7-85.6s0,0,0,0c3-.7,47.9-.6,58.8-.6s0,0,0,0l2.9,2.2ZM76.7,44.5c6.6,5,105,103.8,105.1,105.5s0,0,0,0c-1.6,2.9-100.3,103-108.1,107.7-9.8-.6-64.3,1.1-59.4-2.2-.2-1.2,13.5-16.9,44.9-51,24.9-27.1,46.1-50.5,47.1-51.8,5-3.9-9-14.5-16.8-24.2C44.2,77.8,11.9,47.3,15,42.9s0,0,0,0c3-.7,47.9-.6,58.8-.6,0,0,2.9,2.2,2.9,2.2Z"
+					/>
+				</svg>
+				<p>MIO</p>
+			</div>
+		</template>
+		<template id="arrow-template-lr">
+			<div class="text-arrow">
+				<img src="./assets/arrow-1.svg" alt="arrow" height="50" />
+				<p>MIO</p>
+			</div>
+		</template>
+	</body>
+	<script src="./slide-canvas.js"></script>
+	<script src="./arrow-animation.js"></script>
+	<script></script>
 </html>
